@@ -39,27 +39,50 @@ end
 
 PAGE_URL = ""
 
-page = Nokogiri::HTML(open("http://annuaire-des-mairies.com"))
+page = Nokogiri::HTML(open("http://annuaire-des-mairies.com/val-d-oise.html"))
 
 nom_mairie = page.xpath('///a[@class="lientxt"]')
 
 ar = Array.new
 nom_mairie.each do |x|
-	ar << x.text[5..-1]
+	ar << x.text
 end
 
-puts ar
 
-#price = page.xpath()
+toto = Array.new
+	i = 0
+	while i < ar.size
+	mam = ar[i].downcase.tr(" ", "-")
+	page = Nokogiri::HTML(open("http://www.annuaire-des-mairies.com/95/#{mam}.html"))
 
-#po = Array.new
-#pohash = {}
-#price.each do |x|
-#	po << x.text
-#end
+	if i == 0
+		puts "picking all emails: please wait"
+		puts "..."
+	end
+	if i == 50
+		puts "50/185 email recuperated"
+		puts "..."
+	end
+	if i == 100
+		puts "100/185 email recuperated"
+		puts "..."
+	end
+	if i == 150
+		puts "150/180 email recuperated"
+		puts "..."
+	end
 
-#	pohash = Hash[ar.zip(po)]
-#	coco = pohash.split_into(2398)
+	email_marie = page.xpath("/html/body/div/main/section[2]/div/table/tbody/tr[4]/td[2]")
+	toto << email_marie.text
+	i = i + 1
+	end
 
-#
-# puts coco
+hashoux = {}
+
+coco = Array.new
+
+	hashoux = Hash[ar.zip(toto)]
+	coco = hashoux.split_into(185)
+
+puts coco
+puts coco.size
